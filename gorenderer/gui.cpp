@@ -19,17 +19,17 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	// Register window class
 	::WNDCLASSEX winClass;
 	winClass.lpszClassName	=	"GoRenderer";
-	winClass.cbSize			=	sizeof(::WNDCLASSEX);
-	winClass.style			=	CS_HREDRAW | CS_VREDRAW | CS_OWNDC | CS_DBLCLKS;
+	winClass.cbSize	=	sizeof(::WNDCLASSEX);
+	winClass.style	=	CS_HREDRAW | CS_VREDRAW | CS_OWNDC | CS_DBLCLKS;
 	winClass.lpfnWndProc	=	windowProc;
-	winClass.hInstance		=	hInstance;
-	winClass.hIcon			=	0;
-	winClass.hIconSm		=	0;
-	winClass.hCursor		=	LoadCursor(NULL, IDC_ARROW);
+	winClass.hInstance	=	hInstance;
+	winClass.hIcon	=	0;
+	winClass.hIconSm	=	0;
+	winClass.hCursor	=	LoadCursor(NULL, IDC_ARROW);
 	winClass.hbrBackground	=	(HBRUSH)(BLACK_BRUSH);
 	winClass.lpszMenuName	=	NULL;
-	winClass.cbClsExtra		=	0;
-	winClass.cbWndExtra		=	0;
+	winClass.cbClsExtra	=	0;
+	winClass.cbWndExtra	=	0;
 	RegisterClassExA(&winClass);
 
 	// Creater the window
@@ -62,16 +62,16 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 	// Create an image
 	BITMAPINFO bmpInfo;
-	bmpInfo.bmiHeader.biSize			=	sizeof(BITMAPINFOHEADER);
-	bmpInfo.bmiHeader.biWidth			=	width;
-	bmpInfo.bmiHeader.biHeight			=	height;
-	bmpInfo.bmiHeader.biPlanes			=	1;
-	bmpInfo.bmiHeader.biBitCount		=	32;
-	bmpInfo.bmiHeader.biCompression		=	BI_RGB;
-	bmpInfo.bmiHeader.biSizeImage		=	0;
+	bmpInfo.bmiHeader.biSize	=	sizeof(BITMAPINFOHEADER);
+	bmpInfo.bmiHeader.biWidth	=	width;
+	bmpInfo.bmiHeader.biHeight	=	height;
+	bmpInfo.bmiHeader.biPlanes	=	1;
+	bmpInfo.bmiHeader.biBitCount	=	32;
+	bmpInfo.bmiHeader.biCompression	=	BI_RGB;
+	bmpInfo.bmiHeader.biSizeImage	=	0;
 	bmpInfo.bmiHeader.biXPelsPerMeter	=	0;
 	bmpInfo.bmiHeader.biYPelsPerMeter	=	0;
-	bmpInfo.bmiHeader.biClrUsed			=	0;
+	bmpInfo.bmiHeader.biClrUsed	=	0;
 	bmpInfo.bmiHeader.biClrImportant	=	0;
 
 	HBITMAP hBmp = CreateDIBSection(hDC, &bmpInfo, DIB_RGB_COLORS, (void**)&buffer, 0, 0);
