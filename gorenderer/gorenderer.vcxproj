@@ -111,6 +111,11 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="gui.cpp" />
+    <ClCompile Include="Raster.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="CELLMath.hpp" />
+    <ClInclude Include="Raster.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
