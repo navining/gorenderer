@@ -1,6 +1,15 @@
+/**
+ * @file gui.cpp
+ * @discription GUI window for the renderer.
+ * @author Navi Ning <superokvv@outlook.com>
+ */
+
 #include <Windows.h>
 #include <tchar.h>
 
+/**
+ * Callback function for WinMain().
+ */
 LRESULT CALLBACK windowProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 	switch (msg) {
 	case WM_SIZE:
@@ -15,6 +24,9 @@ LRESULT CALLBACK windowProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 	return DefWindowProc(hWnd, msg, wParam, lParam);
 }
 
+/**
+ * Main function.
+ */
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nShowCmd) {
 	// Register window class
 	::WNDCLASSEX winClass;
