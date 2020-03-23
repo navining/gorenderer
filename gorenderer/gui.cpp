@@ -50,12 +50,12 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		NULL,
 		"GoRenderer",
 		"GoRenderer",
-		//WS_OVERLAPPEDWINDOW & (~WS_MAXIMIZEBOX) & (~WS_THICKFRAME),
-		WS_POPUPWINDOW,
+		WS_OVERLAPPEDWINDOW & (~WS_MAXIMIZEBOX) & (~WS_THICKFRAME),
+		//WS_POPUPWINDOW,
 		0,
 		0,
-		800,
-		600,
+		512,
+		512,
 		0,
 		0,
 		hInstance,
@@ -106,12 +106,21 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		}
 
 		raster.clear();
-		for (int i = 0; i < 100; i++) {
-			raster.drawPoint(rand() % width, rand() % height, CELL::Rgba(255, 0, 0), 3);
-		}
+		CELL::int2 pt[] = {
+			CELL::int2(10, 10),
+			CELL::int2(110, 10),
+			CELL::int2(110, 110),
+			CELL::int2(10, 110)
+		};
+		CELL::Rgba colors[] = {
+			CELL::Rgba(255, 0, 0),
+			CELL::Rgba(0, 255, 0),
+			CELL::Rgba(0, 0, 255),
+			CELL::Rgba(255, 255, 255)
+		};
+		raster.drawRect(pt, colors);
 
 		BitBlt(hDC, 0, 0, width, height, hMem, 0, 0, SRCCOPY);
 	}
-
 	return 0;
 }
