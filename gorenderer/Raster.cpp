@@ -82,11 +82,33 @@ namespace CELL {
 		}
 	}
 
-	inline void Raster::setPixel(unsigned x, unsigned y, Rgba color) {
-		if (x >= _width || y >= _height) {
-			return;
+	void Raster::drawFilledRect(int startX, int startY, int w, int h) {
+		int left = tmax<int>(startX, 0);
+		int top = tmax<int>(startY, 0);
+		int right = tmin<int>(startX + w, _width);
+		int bottom = tmin<int>(startY + h, _height);
+		for (int x = left; x < right; x++) {
+			for (int y = top; y < bottom; y++) {
+				setPixelEx(x, y, _color);
+			}
 		}
-		_buffer[y *_width + x] = color;
+	}
+
+	void Raster::drawRect(const int2 * points, const Rgba * colors) {
+		int left = tmax<int>(points[0].x, 0);
+		int top = tmax<int>(points[0].y, 0);
+		int right = tmin<int>(points[2].x, _width);
+		int bottom = tmin<int>(points[2].y, _height);
+		float w = right - left;
+		float h = bottom - top;
+		for (int x = left; x < right; x++) {
+			Rgba color1 = colorLerp(colors[0], colors[1], (x - left) / w);
+			Rgba color2 = colorLerp(colors[3], colors[2], (x - left) / w);
+			for (int y = top; y < bottom; y++) {
+				Rgba color = colorLerp(color1, color2, (y - top) / h);
+				setPixelEx(x, y, color);
+			}
+		}
 	}
 
 	void Raster::drawLine(float2 pt1, float2 pt2, Rgba color1, Rgba color2) {
