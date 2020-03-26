@@ -8,6 +8,8 @@
 #include <tchar.h>
 #include "Raster.h"
 
+using namespace CELL;
+
  /**
   * Callback function for WinMain().
   */
@@ -91,7 +93,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	HBITMAP hBmp = CreateDIBSection(hDC, &bmpInfo, DIB_RGB_COLORS, (void**)&buffer, 0, 0);
 	SelectObject(hMem, hBmp);
 
-	CELL::Raster raster(width, height, buffer);
+	Raster raster(width, height, buffer);
 
 	// Message Queue
 	MSG msg = { 0 };
@@ -106,19 +108,20 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		}
 
 		raster.clear();
-		CELL::int2 pt[] = {
-			CELL::int2(10, 10),
-			CELL::int2(110, 10),
-			CELL::int2(110, 110),
-			CELL::int2(10, 110)
+
+		int2 pt[3] = {
+			int2(100, 10),
+			int2(10, 100),
+			int2(200, 100),
 		};
-		CELL::Rgba colors[] = {
-			CELL::Rgba(255, 0, 0),
-			CELL::Rgba(0, 255, 0),
-			CELL::Rgba(0, 0, 255),
-			CELL::Rgba(255, 255, 255)
+
+		Rgba color[3] = {
+			Rgba(255, 0, 0),
+			Rgba(0, 255, 0),
+			Rgba(0, 0, 255)
 		};
-		raster.drawRect(pt, colors);
+
+		raster.drawTriangle(pt[0], pt[1], pt[2], color[0], color[1], color[2]);
 
 		BitBlt(hDC, 0, 0, width, height, hMem, 0, 0, SRCCOPY);
 	}
