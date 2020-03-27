@@ -29,5 +29,11 @@
     <ClInclude Include="CELLMath.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="CELLTimestamp.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="test.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

@@ -79,15 +79,14 @@ private:
 	void setPixelEx(unsigned x, unsigned y, Rgba color);;
 
 	// Draw a point
-	void drawPoint(float2 pt, Rgba color) {
-		setPixel(pt.x, pt.y, color);
-	}
+	void drawPoint(float2 pt, Rgba color);
 
-	// Draw a span
+	// Draw a horizonal span
 	void drawSpan(const Span& span);
 	
 	// Draw a triangle with two edges (e1.y > e2.y)
 	void drawEdge(const Edge& e1, const Edge& e2);
 
-
+	// Check if the point locates inside the viewport
+	bool isInRect(int2 pt);
 };

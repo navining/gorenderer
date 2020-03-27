@@ -7,12 +7,14 @@
 #include <Windows.h>
 #include <tchar.h>
 #include "Raster.h"
+#include "CELLTimestamp.hpp"
+#include "test.hpp"
 
 using namespace CELL;
 
- /**
-  * Callback function for WinMain().
-  */
+/**
+ * Callback function for WinMain().
+ */
 LRESULT CALLBACK windowProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 	switch (msg) {
 	case WM_SIZE:
@@ -107,22 +109,19 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 			DispatchMessage(&msg);
 		}
 
+		CELLTimestamp timeStamp;
+		timeStamp.update();
+
+		// Draw
 		raster.clear();
+		draw(raster);
+		
+		// Calculate FPS
+		double msec = timeStamp.getElapsedTimeInMicroSec();
+		char szBuf[128];
+		sprintf_s(szBuf, "FPS: %f ", 1000000.0f / msec);
 
-		int2 pt[3] = {
-			int2(100, 10),
-			int2(10, 100),
-			int2(200, 100),
-		};
-
-		Rgba color[3] = {
-			Rgba(255, 0, 0),
-			Rgba(0, 255, 0),
-			Rgba(0, 0, 255)
-		};
-
-		raster.drawTriangle(pt[0], pt[1], pt[2], color[0], color[1], color[2]);
-
+		TextOut(hMem, 10, 10, szBuf, strlen(szBuf));
 		BitBlt(hDC, 0, 0, width, height, hMem, 0, 0, SRCCOPY);
 	}
 	return 0;

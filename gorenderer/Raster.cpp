@@ -219,11 +219,25 @@ inline void Raster::setPixelEx(unsigned x, unsigned y, Rgba color) {
 	_buffer[y *_width + x] = color;
 }
 
+
+inline void Raster::drawPoint(float2 pt, Rgba color) {
+	setPixel(pt.x, pt.y, color);
+}
+
 void Raster::drawSpan(const Span & span) {
 	float length = span._xEnd - span._xStart;
-	for (int x = span._xStart; x <= span._xEnd; x++) {;
-	Rgba color = colorLerp(span._colorEnd, span._colorStart, float(x - span._xStart) / length);
-		setPixel(x, span._y, color);
+	float scale = 0;
+	float step = 1.0f / length;
+
+	// Viewport clip
+	int startX = tmax<int>(span._xStart, 0);
+	int endX = tmin<int>(span._xEnd, _width);
+	scale += (startX - span._xStart) / length;
+
+	for (int x = startX; x <= endX; x++) {
+		Rgba color = colorLerp(span._colorEnd, span._colorStart, scale);
+		setPixelEx(x, span._y, color);
+		scale += step;
 	}
 }
 
@@ -241,7 +255,16 @@ void Raster::drawEdge(const Edge & e1, const Edge & e2) {
 	float scale2 = 0;
 	float step2 = 1 / yOffset2;
 
-	for (int y = e2._y1; y <= e2._y2; y++) {
+	// Viewport clip
+	int startY1 = tmax<int>(e1._y1, 0);
+	int endY1 = tmin<int>(e1._y2, _height);
+	scale1 += (startY1 - e1._y1) / yOffset1;
+
+	int startY2 = tmax<int>(e2._y1, 0);
+	int endY2 = tmin<int>(e2._y2, _height);
+	scale2 += (startY2 - e2._y1) / yOffset2;
+
+	for (int y = startY2; y <= endY2; y++) {
 		int x1 = e1._x1 + scale1 * xOffset1;
 		int x2 = e2._x1 + scale2 * xOffset2;
 
@@ -257,7 +280,19 @@ void Raster::drawEdge(const Edge & e1, const Edge & e2) {
 }
 
 
+inline bool Raster::isInRect(int2 pt) {
+	if (pt.x >= 0 && pt.x <= _width && pt.y >= 0 && pt.y <= _height) {
+		return true;
+	}
+	return false;
+}
+
 void Raster::drawTriangle(int2 p0, int2 p1, int2 p2, Rgba c0, Rgba c1, Rgba c2) {
+
+	if (!isInRect(p0) && !isInRect(p1) && !isInRect(p2)) {
+		return;
+	}
+
 	Edge edges[] = {
 		Edge(p0.x, p0.y, c0, p1.x, p1.y, c1),
 		Edge(p1.x, p1.y, c1, p2.x, p2.y, c2),
