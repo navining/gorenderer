@@ -13,27 +13,30 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="头文件\CELL">
+      <UniqueIdentifier>{c6133e12-e2f6-48d4-9546-d4bd1aad96d6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="gui.cpp">
+    <ClCompile Include="..\src\gui.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="Raster.cpp">
+    <ClCompile Include="..\src\Raster.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Raster.h">
+    <ClInclude Include="..\include\Raster.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="CELLMath.hpp">
+    <ClInclude Include="..\include\test.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="CELLTimestamp.hpp">
-      <Filter>头文件</Filter>
+    <ClInclude Include="..\include\CELL\CELLMath.hpp">
+      <Filter>头文件\CELL</Filter>
     </ClInclude>
-    <ClInclude Include="test.hpp">
-      <Filter>头文件</Filter>
+    <ClInclude Include="..\include\CELL\CELLTimestamp.hpp">
+      <Filter>头文件\CELL</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -71,6 +71,20 @@ public:
 	// Draw a triangle
 	void drawTriangle(int2 p0, int2 p1, int2 p2, Rgba c0, Rgba c1, Rgba c2);
 
+	// Draw an image
+	void drawImage(int startX, int startY, int w, int h) {
+		int left = tmax<int>(startX, 0);
+		int top = tmax<int>(startY, 0);
+		int right = tmin<int>(startX + w, _width);
+		int bottom = tmin<int>(startY + h, _height);
+		for (int x = left; x < right; x++) {
+			for (int y = top; y < bottom; y++) {
+				Rgba color(rand() % 256, rand() % 256, rand() % 256);
+				setPixelEx(x, y, color);
+			}
+		}
+	}
+
 private:
 	// Set a color for a pixel
 	void setPixel(unsigned x, unsigned y, Rgba color);;

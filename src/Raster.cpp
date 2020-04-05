@@ -242,7 +242,7 @@ void Raster::drawSpan(const Span & span) {
 }
 
 
-void Raster::drawEdge(const Edge & e1, const Edge & e2) {
+inline void Raster::drawEdge(const Edge & e1, const Edge & e2) {
 	if (e1._y2 == e1._y1 || e2._y2 == e2._y1) return;
 
 	float xOffset1 = e1._x2 - e1._x1;
