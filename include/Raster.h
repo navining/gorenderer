@@ -7,100 +7,93 @@
 #pragma once
 
 #include "CELLMath.hpp"
-using namespace CELL;
+#include "Image.hpp"
 
-enum DRAWMODE {
-	DM_POINTS = 0,
-	DM_LINES = 1,
-	DM_LINE_LOOP = 2,
-	DM_LINE_STRIP = 3
-};
+namespace CELL {
 
-class Span {
-public:
-	int _xStart;
-	int _xEnd;
-	Rgba _colorStart;
-	Rgba _colorEnd;
-	int _y;
-public:
-	Span(int xStart, int xEnd, int y, Rgba colorStart, Rgba colorEnd);
-};
+	enum DRAWMODE {
+		DM_POINTS = 0,
+		DM_LINES = 1,
+		DM_LINE_LOOP = 2,
+		DM_LINE_STRIP = 3
+	};
 
-class Edge {
-public:
-	int _x1;
-	int _y1;
-	Rgba _color1;
-	int _x2;
-	int _y2;
-	Rgba _color2;
-public:
-	Edge(int x1, int y1, Rgba color1, int x2, int y2, Rgba color2);
-};
+	class Span {
+	public:
+		int _xStart;
+		int _xEnd;
+		Rgba _colorStart;
+		Rgba _colorEnd;
+		int _y;
+	public:
+		Span(int xStart, int xEnd, int y, Rgba colorStart, Rgba colorEnd);
+	};
 
-class Raster
-{
-public:
-	Rgba* _buffer;
-	int _width;
-	int _height;
-	Rgba _color;
-public:
-	Raster(int w, int h, void* buffer);
-	~Raster();
+	class Edge {
+	public:
+		int _x1;
+		int _y1;
+		Rgba _color1;
+		int _x2;
+		int _y2;
+		Rgba _color2;
+	public:
+		Edge(int x1, int y1, Rgba color1, int x2, int y2, Rgba color2);
+	};
 
-	// Clear the buffer
-	void clear();
+	class Raster
+	{
+	public:
+		Rgba* _buffer;
+		int _width;
+		int _height;
+		Rgba _color;
+	public:
+		Raster(int w, int h, void* buffer);
+		~Raster();
 
-	// Draw a point
-	void drawPoint(int x, int y, Rgba color, int ptSize);
+		// Clear the buffer
+		void clear();
 
-	// Draw according to DRAWMODE
-	void drawArrays(DRAWMODE mode, const float2* points, int count);
+		// Draw a point
+		void drawPoint(int x, int y, Rgba color, int ptSize);
 
-	// Draw a filled rectangle
-	void drawFilledRect(int startX, int startY, int w, int h);
+		// Draw according to DRAWMODE
+		void drawArrays(DRAWMODE mode, const float2* points, int count);
 
-	// Draw a rectangle
-	void drawRect(const int2* points, const Rgba* colors);
+		// Draw a filled rectangle
+		void drawFilledRect(int startX, int startY, int w, int h);
 
-	// Draw a line
-	void drawLine(float2 pt1, float2 pt2, Rgba color1, Rgba color2);
+		// Draw a rectangle
+		void drawRect(const int2* points, const Rgba* colors);
 
-	// Draw a triangle
-	void drawTriangle(int2 p0, int2 p1, int2 p2, Rgba c0, Rgba c1, Rgba c2);
+		// Draw a line
+		void drawLine(float2 pt1, float2 pt2, Rgba color1, Rgba color2);
 
-	// Draw an image
-	void drawImage(int startX, int startY, int w, int h) {
-		int left = tmax<int>(startX, 0);
-		int top = tmax<int>(startY, 0);
-		int right = tmin<int>(startX + w, _width);
-		int bottom = tmin<int>(startY + h, _height);
-		for (int x = left; x < right; x++) {
-			for (int y = top; y < bottom; y++) {
-				Rgba color(rand() % 256, rand() % 256, rand() % 256);
-				setPixelEx(x, y, color);
-			}
-		}
-	}
+		// Draw a triangle
+		void drawTriangle(int2 p0, int2 p1, int2 p2, Rgba c0, Rgba c1, Rgba c2);
 
-private:
-	// Set a color for a pixel
-	void setPixel(unsigned x, unsigned y, Rgba color);;
+		// Draw an image
+		void drawImage(int startX, int startY, const Image *image);
 
-	// Set a color for a pixel (without boundary check)
-	void setPixelEx(unsigned x, unsigned y, Rgba color);;
+	private:
+		// Set a color for a pixel
+		void setPixel(unsigned x, unsigned y, Rgba color);;
 
-	// Draw a point
-	void drawPoint(float2 pt, Rgba color);
+		// Set a color for a pixel (without boundary check)
+		void setPixelEx(unsigned x, unsigned y, Rgba color);;
 
-	// Draw a horizonal span
-	void drawSpan(const Span& span);
-	
-	// Draw a triangle with two edges (e1.y > e2.y)
-	void drawEdge(const Edge& e1, const Edge& e2);
+		// Draw a point
+		void drawPoint(float2 pt, Rgba color);
 
-	// Check if the point locates inside the viewport
-	bool isInRect(int2 pt);
-};
+		// Draw a horizonal span
+		void drawSpan(const Span& span);
+
+		// Draw a triangle with two edges (e1.y > e2.y)
+		void drawEdge(const Edge& e1, const Edge& e2);
+
+		// Check if the point locates inside the viewport
+		bool isInRect(int2 pt);
+	};
+
+}

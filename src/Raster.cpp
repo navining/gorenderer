@@ -5,6 +5,7 @@
  */
 
 #include "Raster.h"
+using namespace CELL;
 
 Span::Span(int xStart, int xEnd, int y, Rgba colorStart, Rgba colorEnd) {
 	if (xStart < xEnd) {
@@ -316,3 +317,43 @@ void Raster::drawTriangle(int2 p0, int2 p1, int2 p2, Rgba c0, Rgba c1, Rgba c2) 
 	drawEdge(edges[iMax], edges[iMin2]);
 }
 
+void Raster::drawImage(int startX, int startY, const Image * image) {
+	if (image == NULL) return;
+	int left = tmax<int>(startX, 0);
+	int top = tmax<int>(startY, 0);
+	int right = tmin<int>(startX + image->width(), _width);
+	int bottom = tmin<int>(startY + image->height(), _height);
+	for (int x = left; x < right; x++) {
+		for (int y = top; y < bottom; y++) {
+			Rgba color = image->pixelAt(x - left, y - top);
+			setPixelEx(x, y, color);
+		}
+	}
+}
+
+Image* Image::loadFromFile(const char* fileName) {
+	// Get image format
+	FREE_IMAGE_FORMAT fifmt = FreeImage_GetFileType(fileName, 0);
+	if (fifmt == FIF_UNKNOWN) {
+		return NULL;
+	}
+
+	// Load image
+	FIBITMAP *dib = FreeImage_Load(fifmt, fileName, 0);
+	FREE_IMAGE_COLOR_TYPE type = FreeImage_GetColorType(dib);
+
+	// Get data pointer
+	FIBITMAP *temp = dib;
+	dib = FreeImage_ConvertTo32Bits(dib);
+	FreeImage_Unload(temp);
+
+	BYTE *pixels = (BYTE*)FreeImage_GetBits(dib);
+	int width = FreeImage_GetWidth(dib);
+	int height = FreeImage_GetHeight(dib);
+
+	Image *image = new Image(width, height, pixels);
+
+	FreeImage_Unload(dib);
+
+	return image;
+}

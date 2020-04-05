@@ -30,6 +30,19 @@ LRESULT CALLBACK windowProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 }
 
 /**
+ * Get resource path
+ */
+void getResourcePath(HINSTANCE hInstance, char pPath[1024]) {
+	char szPathName[1024];
+	char szDriver[64];
+	char szPath[1024];
+	GetModuleFileName(hInstance, szPathName, sizeof(szPathName));
+	_splitpath(szPathName, szDriver, szPath, 0, 0);
+	sprintf(pPath, "%s%s", szDriver, szPath);
+}
+
+
+/**
  * Main function.
  */
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nShowCmd) {
@@ -95,6 +108,13 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	HBITMAP hBmp = CreateDIBSection(hDC, &bmpInfo, DIB_RGB_COLORS, (void**)&buffer, 0, 0);
 	SelectObject(hMem, hBmp);
 
+	// Get file path (for image loading)
+	char szPath[1024];
+	getResourcePath(0, szPath);
+	char szImage[1024];
+	sprintf(szImage, "%s/image/1.jpg", szPath);
+	Image *image = Image::loadFromFile(szImage);
+
 	Raster raster(width, height, buffer);
 
 	// Message Queue
@@ -114,7 +134,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 		// Draw
 		raster.clear();
-		draw(raster);
+		draw(raster, image);
 		
 		// Calculate FPS
 		double msec = timeStamp.getElapsedTimeInMicroSec();
@@ -124,5 +144,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		TextOut(hMem, 10, 10, szBuf, strlen(szBuf));
 		BitBlt(hDC, 0, 0, width, height, hMem, 0, 0, SRCCOPY);
 	}
+
+	delete image;
+
 	return 0;
 }

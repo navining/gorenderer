@@ -16,6 +16,9 @@
     <Filter Include="头文件\CELL">
       <UniqueIdentifier>{c6133e12-e2f6-48d4-9546-d4bd1aad96d6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="头文件\FreeImage">
+      <UniqueIdentifier>{b237e6c2-9037-44d0-94d1-613610815b81}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\gui.cpp">
@@ -37,6 +40,12 @@
     </ClInclude>
     <ClInclude Include="..\include\CELL\CELLTimestamp.hpp">
       <Filter>头文件\CELL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\Image.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\thirdparty\FreeImage.h">
+      <Filter>头文件\FreeImage</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
