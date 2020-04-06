@@ -336,6 +336,20 @@ void Raster::drawImage(int startX, int startY, const Image * image) {
 	}
 }
 
+void CELL::Raster::drawImage(int startX, int startY, const Image * image, int x1, int y1, int w, int h) {
+	if (image == NULL) return;
+	int left = tmax<int>(startX, 0);
+	int top = tmax<int>(startY, 0);
+	int right = tmin<int>(startX + w, _width);
+	int bottom = tmin<int>(startY + h, _height);
+	for (int x = left; x < right; x++) {
+		for (int y = top; y < bottom; y++) {
+			Rgba color = image->pixelAt(x - left + x1, y - top + y1);
+			setPixelEx(x, y, color);
+		}
+	}
+}
+
 void Raster::drawImageColorKey(int startX, int startY, const Image * image, Rgba key) {
 	if (image == NULL) return;
 	int left = tmax<int>(startX, 0);
@@ -393,6 +407,56 @@ void CELL::Raster::drawImageAlpha(int startX, int startY, const Image * image, f
 			Rgba srcColor = image->pixelAt(x - left, y - top);
 			Rgba dstColor = getPixel(x, y);
 			Rgba color = colorLerp(dstColor, srcColor, alpha);
+			setPixelEx(x, y, color);
+		}
+	}
+}
+
+void CELL::Raster::drawImageScale(int dstX, int dstY, int dstW, int dstH, const Image * image) {
+	float xScale = image->width() / (float)dstW;
+	float yScale = image->height() / (float)dstH;
+
+	for (int x = dstX; x < dstX + dstW; x++) {
+		for (int y = dstY; y < dstY + dstH; y++) {
+			float xx = (x - dstX) * xScale;
+			float yy = (y - dstY) * yScale;
+
+			Rgba color = image->pixelAt(xx, yy);
+			setPixelEx(x, y, color);
+		}
+	}
+}
+
+void CELL::Raster::drawImageScaleHighQuality(int dstX, int dstY, int dstW, int dstH, const Image * image) {
+	float xScale = image->width() / (float)dstW;
+	float yScale = image->height() / (float)dstH;
+
+	for (int x = dstX; x < dstX + dstW; x++) {
+		for (int y = dstY; y < dstY + dstH; y++) {
+			float xx = (x - dstX) * xScale;
+			float yy = (y - dstY) * yScale;
+			Rgba color;
+
+			
+			if (xx >= image->width() - 1 && yy >= image->height() - 1){
+				color = image->pixelAt(xx, yy);
+			} else if (xx >= image->width() - 1) {
+				Rgba colorY1 = image->pixelAt(xx, yy);
+				Rgba colorY2 = image->pixelAt(xx, yy + 1);
+				color = colorLerp(colorY1, colorY2, yy - (int)yy);
+			} else if (yy >= image->height() - 1){
+				Rgba colorX1 = image->pixelAt(xx, yy);
+				Rgba colorX2 = image->pixelAt(xx + 1, yy);
+				color = colorLerp(colorX1, colorX2, xx - (int)xx);
+			} else {
+				Rgba colorX1Y1 = image->pixelAt(xx, yy);
+				Rgba colorX2Y1 = image->pixelAt(xx + 1, yy);
+				Rgba colorX1Y2 = image->pixelAt(xx, yy + 1);
+				Rgba colorX2Y2 = image->pixelAt(xx + 1, yy + 1);
+				Rgba colorY1 = colorLerp(colorX1Y1, colorX2Y1, xx - (int)xx);
+				Rgba colorY2 = colorLerp(colorX1Y2, colorX2Y2, xx - (int)xx);
+				color = colorLerp(colorY1, colorY2, yy - (int)yy);
+			}
 			setPixelEx(x, y, color);
 		}
 	}

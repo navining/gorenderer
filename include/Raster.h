@@ -76,6 +76,9 @@ namespace CELL {
 		// Draw an image
 		void drawImage(int startX, int startY, const Image *image);
 
+		// Draw part of an image	// TODO: check out of bounds
+		void drawImage(int startX, int startY, const Image *image, int x, int y, int w, int h);
+
 		// Draw an image using color key
 		void drawImageColorKey(int startX, int startY, const Image *image, Rgba key);
 
@@ -87,6 +90,12 @@ namespace CELL {
 
 		// Draw an image with transparency
 		void drawImageAlpha(int startX, int startY, const Image *image, float alpha);
+
+		// Draw a scaled image	//	TODO: check out of bounds
+		void drawImageScale(int dstX, int dstY, int dstW, int dstH, const Image *image);
+
+		// Draw a scaled image with high quality	//	TODO: check out of bounds
+		void drawImageScaleHighQuality(int dstX, int dstY, int dstW, int dstH, const Image *image);
 
 	private:
 		// Get pixel color

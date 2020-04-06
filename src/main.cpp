@@ -112,7 +112,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	char szPath[1024];
 	getResourcePath(0, szPath);
 	char szImage[1024];
-	sprintf(szImage, "%s/image/grass.png", szPath);
+	sprintf(szImage, "%s/image/scale.jpg", szPath);
 	Image *image = Image::loadFromFile(szImage);
 
 	Raster raster(width, height, buffer);
