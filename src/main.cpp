@@ -71,8 +71,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		//WS_POPUPWINDOW,
 		0,
 		0,
-		512,
-		512,
+		800,
+		600,
 		0,
 		0,
 		hInstance,
@@ -112,7 +112,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	char szPath[1024];
 	getResourcePath(0, szPath);
 	char szImage[1024];
-	sprintf(szImage, "%s/image/1.jpg", szPath);
+	sprintf(szImage, "%s/image/grass.png", szPath);
 	Image *image = Image::loadFromFile(szImage);
 
 	Raster raster(width, height, buffer);

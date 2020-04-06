@@ -76,12 +76,27 @@ namespace CELL {
 		// Draw an image
 		void drawImage(int startX, int startY, const Image *image);
 
+		// Draw an image using color key
+		void drawImageColorKey(int startX, int startY, const Image *image, Rgba key);
+
+		// Draw an image using alpha test
+		void drawImageAlphaTest(int startX, int startY, const Image *image, byte alpha);
+
+		// Draw an image using alpha blend
+		void drawImageAlphaBlend(int startX, int startY, const Image *image, float alpha = 1);
+
+		// Draw an image with transparency
+		void drawImageAlpha(int startX, int startY, const Image *image, float alpha);
+
 	private:
+		// Get pixel color
+		Rgba getPixel(unsigned x, unsigned y);
+
 		// Set a color for a pixel
-		void setPixel(unsigned x, unsigned y, Rgba color);;
+		void setPixel(unsigned x, unsigned y, Rgba color);
 
 		// Set a color for a pixel (without boundary check)
-		void setPixelEx(unsigned x, unsigned y, Rgba color);;
+		void setPixelEx(unsigned x, unsigned y, Rgba color);
 
 		// Draw a point
 		void drawPoint(float2 pt, Rgba color);

@@ -209,6 +209,11 @@ void Raster::drawLine(float2 pt1, float2 pt2, Rgba color1, Rgba color2) {
 
 }
 
+inline Rgba CELL::Raster::getPixel(unsigned x, unsigned y)
+{
+	return _buffer[y *_width + x];
+}
+
 inline void Raster::setPixel(unsigned x, unsigned y, Rgba color) {
 	if (x >= _width || y >= _height) {
 		return;
@@ -326,6 +331,68 @@ void Raster::drawImage(int startX, int startY, const Image * image) {
 	for (int x = left; x < right; x++) {
 		for (int y = top; y < bottom; y++) {
 			Rgba color = image->pixelAt(x - left, y - top);
+			setPixelEx(x, y, color);
+		}
+	}
+}
+
+void Raster::drawImageColorKey(int startX, int startY, const Image * image, Rgba key) {
+	if (image == NULL) return;
+	int left = tmax<int>(startX, 0);
+	int top = tmax<int>(startY, 0);
+	int right = tmin<int>(startX + image->width(), _width);
+	int bottom = tmin<int>(startY + image->height(), _height);
+	for (int x = left; x < right; x++) {
+		for (int y = top; y < bottom; y++) {
+			Rgba color = image->pixelAt(x - left, y - top);
+			if (color != key)
+				setPixelEx(x, y, color);
+		}
+	}
+}
+
+void Raster::drawImageAlphaTest(int startX, int startY, const Image * image, byte alpha) {
+	if (image == NULL) return;
+	int left = tmax<int>(startX, 0);
+	int top = tmax<int>(startY, 0);
+	int right = tmin<int>(startX + image->width(), _width);
+	int bottom = tmin<int>(startY + image->height(), _height);
+	for (int x = left; x < right; x++) {
+		for (int y = top; y < bottom; y++) {
+			Rgba color = image->pixelAt(x - left, y - top);
+			if (color._a > alpha)
+				setPixelEx(x, y, color);
+		}
+	}
+}
+
+void Raster::drawImageAlphaBlend(int startX, int startY, const Image * image, float alpha) {
+	if (image == NULL) return;
+	int left = tmax<int>(startX, 0);
+	int top = tmax<int>(startY, 0);
+	int right = tmin<int>(startX + image->width(), _width);
+	int bottom = tmin<int>(startY + image->height(), _height);
+	for (int x = left; x < right; x++) {
+		for (int y = top; y < bottom; y++) {
+			Rgba srcColor = image->pixelAt(x - left, y - top);
+			Rgba dstColor = getPixel(x, y);
+			Rgba color = colorLerp(dstColor, srcColor, srcColor._a / 255.0f * alpha);
+			setPixelEx(x, y, color);
+		}
+	}
+}
+
+void CELL::Raster::drawImageAlpha(int startX, int startY, const Image * image, float alpha) {
+	if (image == NULL) return;
+	int left = tmax<int>(startX, 0);
+	int top = tmax<int>(startY, 0);
+	int right = tmin<int>(startX + image->width(), _width);
+	int bottom = tmin<int>(startY + image->height(), _height);
+	for (int x = left; x < right; x++) {
+		for (int y = top; y < bottom; y++) {
+			Rgba srcColor = image->pixelAt(x - left, y - top);
+			Rgba dstColor = getPixel(x, y);
+			Rgba color = colorLerp(dstColor, srcColor, alpha);
 			setPixelEx(x, y, color);
 		}
 	}
