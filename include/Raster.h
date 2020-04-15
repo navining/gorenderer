@@ -70,6 +70,9 @@ namespace CELL {
 		// Draw a line
 		void drawLine(float2 pt1, float2 pt2, Rgba color1, Rgba color2);
 
+		// Draw a Bezier Line
+		void drawBezier(float2 start, float2 end, float2 p1, float2 p2);
+
 		// Draw a triangle
 		void drawTriangle(int2 p0, int2 p1, int2 p2, Rgba c0, Rgba c1, Rgba c2);
 
@@ -94,7 +97,7 @@ namespace CELL {
 		// Draw a scaled image	//	TODO: check out of bounds
 		void drawImageScale(int dstX, int dstY, int dstW, int dstH, const Image *image);
 
-		// Draw a scaled image with high quality	//	TODO: check out of bounds
+		// Draw a scaled image with high quality	//	TODO: check out of bounds, optimization
 		void drawImageScaleHighQuality(int dstX, int dstY, int dstW, int dstH, const Image *image);
 
 	private:

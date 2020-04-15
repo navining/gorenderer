@@ -97,7 +97,7 @@ void Raster::drawArrays(DRAWMODE mode, const float2 * points, int count) {
 	case DM_LINES:
 	{
 		count = count / 2 * 2;
-		for (int i = 0; i < count; i++) {
+		for (int i = 0; i < count; i+=2) {
 			drawLine(points[i], points[i + 1], _color, _color);
 		}
 	}
@@ -207,6 +207,29 @@ void Raster::drawLine(float2 pt1, float2 pt2, Rgba color1, Rgba color2) {
 		}
 	}
 
+}
+
+void CELL::Raster::drawBezier(float2 p0, float2 p3, float2 p1, float2 p2)
+{
+	float2 prev[2];
+	for (float t = 0; t < 1.0f; t += 0.01f) {
+		float x = p0.x * pow(1 - t, 3)
+			+ 3 * p1.x*t* pow(1 - t, 2)
+			+ 3 * p2.x*t*t*(1 - t)
+			+ p3.x*t*t*t;
+		float y = p0.y * pow(1 - t, 3)
+			+ 3 * p1.y*t* pow(1 - t, 2)
+			+ 3 * p2.y*t*t*(1 - t)
+			+ p3.y*t*t*t;
+		if (t == 0) {
+			prev[0] = float2(x, y);
+		}
+		else {
+			prev[1] = float2(x, y);
+			drawArrays(DM_LINES, prev, 2);
+			prev[0] = prev[1];
+		}
+	}
 }
 
 inline Rgba CELL::Raster::getPixel(unsigned x, unsigned y)
